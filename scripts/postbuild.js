@@ -10,6 +10,14 @@ let found = false;
 for (const p of paths) {
   if (fs.existsSync(p)) {
     fs.copyFileSync(p, 'api/server.js');
+
+    const assetsSource = path.join(path.dirname(p), 'assets');
+    if (fs.existsSync(assetsSource)) {
+      fs.rmSync('api/assets', { recursive: true, force: true });
+      fs.cpSync(assetsSource, 'api/assets', { recursive: true });
+      console.log(`Successfully copied assets from ${assetsSource} to api/assets`);
+    }
+
     console.log(`Successfully copied ${p} to api/server.js`);
     found = true;
     break;
